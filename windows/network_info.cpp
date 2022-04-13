@@ -129,7 +129,7 @@ std::string NetworkInfo::GetWifiGatewayAddress() const {
       std::string res;
       if (GetAdaptersAddresses(AF_UNSPEC, 0x0080, NULL, pIpAdapterAddresses,
                                &ulSize) == 0) {
-        res = GetAdapterAddress(pGuid, pIpAdapterAddresses);
+        res = GetAdapterGatewayAddress(pGuid, pIpAdapterAddresses);
       }
 
       HeapFree(GetProcessHeap(), 0, pIpAdapterAddresses);
