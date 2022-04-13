@@ -26,6 +26,7 @@ public:
   std::string GetWifiName() const;
   std::string GetWifiBssid() const;
   std::string GetWifiIpAddress() const;
+  std::string GetWifiGatewayAddress() const;
 
 private:
   void Init();

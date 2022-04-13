@@ -90,6 +90,53 @@ std::string NetworkInfo::GetWifiIpAddress() const {
       });
 }
 
+static std::string FormatGatewayIpAddress(PIP_ADAPTER_ADDRESSES pIpAdapterAddress) {
+  PIP_ADAPTER_UNICAST_ADDRESS_LH pAddr = pIpAdapterAddress->FirstGatewayAddress;
+  while (pAddr->Next != NULL) {
+    pAddr = pAddr->Next;
+  }
+
+  CHAR buffer[64];
+  sockaddr_in *sa_in = (sockaddr_in *)pAddr->Address.lpSockaddr;
+  return std::string(inet_ntop(AF_INET, &(sa_in->sin_addr), buffer, 64));
+}
+
+static std::string
+GetAdapterGatewayAddress(LPGUID pGuid, PIP_ADAPTER_ADDRESSES pIpAdapterAddresses) {
+  IF_LUID ifLuid;
+  if (ConvertInterfaceGuidToLuid(pGuid, &ifLuid) != NO_ERROR) {
+    return "";
+  }
+
+  PIP_ADAPTER_ADDRESSES pCurrent = pIpAdapterAddresses;
+  while (pCurrent) {
+    if (pCurrent->Luid.Value == ifLuid.Value) {
+      return FormatGatewayIpAddress(pCurrent);
+    }
+    pCurrent = pCurrent->Next;
+  }
+  return "";
+}
+
+std::string NetworkInfo::GetWifiGatewayAddress() const {
+  return const_cast<NetworkInfo *>(this)->Query(
+    [&](LPGUID pGuid, PWLAN_CONNECTION_ATTRIBUTES pAttributes) {
+      ULONG ulSize = 0;
+      GetAdaptersAddresses(AF_INET, 0x0080, NULL, NULL, &ulSize);
+      PIP_ADAPTER_ADDRESSES pIpAdapterAddresses =
+          (PIP_ADAPTER_ADDRESSES)HeapAlloc(GetProcessHeap(), 0, ulSize);
+
+      std::string res;
+      if (GetAdaptersAddresses(AF_UNSPEC, 0x0080, NULL, pIpAdapterAddresses,
+                               &ulSize) == 0) {
+        res = GetAdapterAddress(pGuid, pIpAdapterAddresses);
+      }
+
+      HeapFree(GetProcessHeap(), 0, pIpAdapterAddresses);
+      return res;
+    });
+}
+
 void NetworkInfo::Init() {
   if (_hClient != NULL) {
     return;

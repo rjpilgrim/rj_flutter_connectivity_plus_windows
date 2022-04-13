@@ -59,7 +59,10 @@ void NetworkInfoPlusWindowsPlugin::HandleMethodCall(
     HandleMethodResult(_networkInfo.GetWifiBssid(), result);
   } else if (method_call.method_name().compare("wifiIPAddress") == 0) {
     HandleMethodResult(_networkInfo.GetWifiIpAddress(), result);
-  } else {
+  } else if (method_call.method_name().compare("wifiGatewayAddress") == 0) {
+    HandleMethodResult(_networkInfo.GetWifiGatewayAddress(), result);
+  }
+  else {
     result->NotImplemented();
   }
 }
