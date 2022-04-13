@@ -91,7 +91,7 @@ std::string NetworkInfo::GetWifiIpAddress() const {
 }
 
 static std::string FormatGatewayIpAddress(PIP_ADAPTER_ADDRESSES pIpAdapterAddress) {
-  PIP_ADAPTER_UNICAST_ADDRESS_LH pAddr = pIpAdapterAddress->FirstGatewayAddress;
+  PIP_ADAPTER_GATEWAY_ADDRESS_LH pAddr = pIpAdapterAddress->FirstGatewayAddress;
   while (pAddr->Next != NULL) {
     pAddr = pAddr->Next;
   }
