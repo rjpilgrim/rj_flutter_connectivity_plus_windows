@@ -1,14 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
-set(PROJECT_NAME "connectivity_plus_windows")
+set(PROJECT_NAME "network_info_plus_windows")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
-# This value is used when generating builds using this plugin, so it must
-# not be changed
-set(PLUGIN_NAME "connectivity_plus_windows_plugin")
+set(PLUGIN_NAME "network_info_plus_windows_plugin")
 
 add_library(${PLUGIN_NAME} SHARED
-  "connectivity_plus_windows_plugin.cpp"
-  "network_manager.cpp"
+"network_info.cpp"
+"network_info_plus_windows_plugin.cpp"
 )
 apply_standard_settings(${PLUGIN_NAME})
 set_target_properties(${PLUGIN_NAME} PROPERTIES
@@ -20,11 +18,11 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
   flutter
   flutter_wrapper_plugin
   iphlpapi
+  wlanapi
+  ws2_32
 )
 
-# List of absolute paths to libraries that should be bundled with the plugin
-set(connectivity_plus_windows_bundled_libraries
+set(network_info_plus_windows_bundled_libraries
   ""
   PARENT_SCOPE
 )
- 

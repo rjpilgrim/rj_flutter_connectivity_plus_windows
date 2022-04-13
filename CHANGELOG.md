@@ -1,14 +1,6 @@
-## 1.2.0
-
-- Add ethernet as connectivity result.
-
-## 1.1.0
-
-- Update connectivity plus
-
 ## 1.0.2
 
-- Update connectivity plus
+- Fix include order: #242
 
 ## 1.0.1
 
@@ -16,11 +8,11 @@
 
 ## 1.0.0
 
-- Migrated to null safety
+- Migrate to null-safety.
 
 ## 0.1.1
 
-- Address pub score
+- Address pub score.
 
 ## 0.1.0
 
